@@ -8,9 +8,16 @@ def main():
 		if command == "exit":
 			print("done")
 			break
+		elif command[:3] == 'cd ':
+			psh_cd(command[3:])
 		else:
 			executec(command)
 
+def psh_cd(inp):
+	try:
+		os.chdir(os.path.abspath(inp))
+	except Exception:
+		print("no directory found")
 def executec(command):
 	print(command.split())
 	try: 
