@@ -123,7 +123,7 @@ def parsecmd(command_line):
 				newcmd.append(cmd)
 
 	command_line = newcmd'''
-	if sum(parsechecks) == 1:
+	if sum(parsechecks) == 1 or  sum(parsechecks) == 0:
 		command_line = command_line.split()
 	return command_line
 
@@ -237,14 +237,16 @@ def executec(command, parsechecks, first_in=None, last_out=None, background = Fa
 		background.append(pid)
 		os.kill(pid, signal.SIGCONT)
 	else:
-		try: 
+		if background:
+			f = subprocess.Popen(command, stdout=last_out)
 
-			if background:
-				f = subprocess.Popen(c, stdin=f.stdout, stdout=last_out, stderr=subprocess.PIPE)
-			else:
-				f = subprocess.Popen(c, stdin=f.stdout, stdout=last_out, stderr=subprocess.PIPE).wait()
-		except Exception:
-			print("not working")	
+		else:	
+			f = subprocess.Popen(command, stdout=last_out)
+			
+			f.wait()
+		#print(f)
+		addbgfg(f.pid, background)
+		
 
 def cleanjobs():
 	global jobsdict
@@ -257,13 +259,13 @@ def cleanjobs():
 	#print (jobsdict)
 
 
-def addbgfg(pid, back)
+def addbgfg(pid, back):
 	global foreground
 	global background
 	if back:
 		background.append(pid)
 	else:
-		foreground.appned(pid)
+		foreground.append(pid)
 
 if __name__ == "__main__":
 	main()
